@@ -44,6 +44,12 @@ public:
       return -1;
     }
   }
+
+  int node_depth() {
+    if (this->isroot())
+      return 0;
+    return 1 + this->parent->node_depth();
+  }
 };
 
 template <typename T2> node<T2> test_create_tree() {
@@ -62,7 +68,6 @@ template <typename T2> node<T2> test_create_tree() {
   root->left->right->parent = root->left;
   root->left->left = new node<double>(7);
   root->left->left->parent = root->left;
-
   return *root;
 }
 
@@ -89,9 +94,15 @@ void test_hight() {
   std::cout << root.tree_hight() << std::endl;
 }
 
+void test_node_despth(){
+  node<double> root = test_create_tree<double>();
+  std::cout<<root.right->node_depth()<<std::endl;
+}
+
 int main() {
   test_postorder();
   test_preorder();
   test_inorder();
   test_hight();
+  test_node_despth();
 }
