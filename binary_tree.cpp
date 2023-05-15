@@ -34,6 +34,16 @@ public:
       this->right->inorder();
     }
   }
+
+  int tree_hight() {
+    if (!this->isexternal()) {
+      int right_hight = this->right->tree_hight();
+      int left_hight = this->left->tree_hight();
+      return right_hight > left_hight ? right_hight + 1 : left_hight + 1;
+    } else {
+      return -1;
+    }
+  }
 };
 
 template <typename T2> node<T2> test_create_tree() {
@@ -42,6 +52,8 @@ template <typename T2> node<T2> test_create_tree() {
   root->right->parent = root;
   root->right->right = new node<double>(3);
   root->right->right->parent = root->right;
+  root->right->right->right = new node<double>(100);
+  root->right->right->right->parent = root->right->right;
   root->right->left = new node<double>(4);
   root->right->left->parent = root->right;
   root->left = new node<double>(5);
@@ -50,6 +62,7 @@ template <typename T2> node<T2> test_create_tree() {
   root->left->right->parent = root->left;
   root->left->left = new node<double>(7);
   root->left->left->parent = root->left;
+
   return *root;
 }
 
@@ -71,8 +84,14 @@ void test_inorder() {
   std::cout << std::endl;
 }
 
+void test_hight() {
+  node<double> root = test_create_tree<double>();
+  std::cout << root.tree_hight() << std::endl;
+}
+
 int main() {
   test_postorder();
   test_preorder();
   test_inorder();
+  test_hight();
 }
