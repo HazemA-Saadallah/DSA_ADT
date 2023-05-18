@@ -1,4 +1,6 @@
 #include <iostream>
+#include <queue>
+#include <cmath>
 
 template <typename T> class node {
 public:
@@ -32,6 +34,25 @@ public:
       this->left->inorder();
       std::cout << this->data << '\t';
       this->right->inorder();
+    }
+  }
+
+  int max_nodes(){
+    int max_number_of_nodes = 0;
+    for(int i{this->tree_hight()} ; i >= 0 ; i--) max_number_of_nodes += pow(2, i);
+    return max_number_of_nodes;
+  }
+
+  void level_treaversal(){
+    std::queue<node*> q;
+    q.push(this);
+    for(int i{0} ; i <= this->max_nodes() - pow(2, this->tree_hight()); i++) {
+      if(!q.empty()){
+        if(q.front()->left) q.push(q.front()->left);
+        if(q.front()->right) q.push(q.front()->right);
+        std::cout<<q.front()->data<<'\t';
+        q.pop();
+        }
     }
   }
 
@@ -113,6 +134,11 @@ void test_tree_viewer() {
   root.tree_viewer();
 }
 
+void test_tree_level_traverse(){
+  node<double> root = test_create_tree<double>();
+  root.level_treaversal();
+}
+
 int main() {
   // test_postorder();
   // test_preorder();
@@ -120,4 +146,6 @@ int main() {
   // test_hight();
   // test_node_depth();
   // test_tree_viewer();
+  test_tree_level_traverse(); 
+  
 }
