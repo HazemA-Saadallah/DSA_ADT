@@ -50,6 +50,15 @@ public:
       return 0;
     return 1 + this->parent->node_depth();
   }
+
+  void tree_viewer(){
+    int lines_num = 2*this->tree_hight()-1;
+    for(int i{0} ; i < lines_num ; i++){
+      for(int j{i} ; j < 5 ; j++) std::cout<<'\t';
+      for(int k{i+1} ; k > 0 ; k--) std::cout<<'\t'<<'\t'<<'h';
+      std::cout<<std::endl;
+    } 
+  }
 };
 
 template <typename T2> node<T2> test_create_tree() {
@@ -94,15 +103,21 @@ void test_hight() {
   std::cout << root.tree_hight() << std::endl;
 }
 
-void test_node_despth(){
+void test_node_depth() {
   node<double> root = test_create_tree<double>();
-  std::cout<<root.right->node_depth()<<std::endl;
+  std::cout << root.right->node_depth() << std::endl;
+}
+
+void test_tree_viewer() {
+  node<double> root = test_create_tree<double>();
+  root.tree_viewer();
 }
 
 int main() {
-  test_postorder();
-  test_preorder();
-  test_inorder();
-  test_hight();
-  test_node_despth();
+  // test_postorder();
+  // test_preorder();
+  // test_inorder();
+  // test_hight();
+  // test_node_depth();
+  // test_tree_viewer();
 }
