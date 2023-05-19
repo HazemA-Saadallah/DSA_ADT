@@ -8,10 +8,26 @@ public:
   node *right = nullptr;
   node *left = nullptr;
   node *parent;
-  node(T data) { this->data = data; }
+  bool status = false;
 
   bool isroot() { return this->parent == nullptr; }
   bool isexternal() { return this == nullptr; }
+
+  int max_nodes(){
+    int max_number_of_nodes = 0;
+    for(int i{this->tree_hight()} ; i >= 0 ; i--) max_number_of_nodes += pow(2, i);
+    return max_number_of_nodes;
+  }
+
+  node* convert_to_array(){
+    node *arr = new node[this->max_nodes()+1];
+    arr[1] = *this;
+    for(int i{1} ; i <= this->max_nodes() ; i++){
+      if(arr[i].status && arr[i].left) arr[2*i] = *arr[i].left;
+      if(arr[i].status && arr[i].right) arr[2*i +1] = *arr[i].right;
+    }
+    return arr;
+  }
 
   void postorder_traverse() {
     if (!this->isexternal()) {
@@ -35,12 +51,6 @@ public:
       std::cout << this->data << '\t';
       this->right->inorder();
     }
-  }
-
-  int max_nodes(){
-    int max_number_of_nodes = 0;
-    for(int i{this->tree_hight()} ; i >= 0 ; i--) max_number_of_nodes += pow(2, i);
-    return max_number_of_nodes;
   }
 
   void level_treaversal(){
@@ -83,21 +93,37 @@ public:
 };
 
 template <typename T2> node<T2> test_create_tree() {
-  node<double> *root = new node<double>(1);
-  root->right = new node<double>(2);
+  node<double> *root = new node<double>;
+  root->data = 1;
+  root->status = true;
+  root->right = new node<double>;
   root->right->parent = root;
-  root->right->right = new node<double>(3);
+  root->right->data = 2;
+  root->right->status = true;
+  root->right->right = new node<double>;
   root->right->right->parent = root->right;
-  root->right->right->right = new node<double>(100);
+  root->right->right->data = 3;
+  root->right->right->status = true;
+  root->right->right->right = new node<double>;
   root->right->right->right->parent = root->right->right;
-  root->right->left = new node<double>(4);
+  root->right->right->right->data = 100;
+  root->right->right->right->status = true;
+  root->right->left = new node<double>;
   root->right->left->parent = root->right;
-  root->left = new node<double>(5);
+  root->right->left->data = 4;
+  root->right->left->status = true;
+  root->left = new node<double>;
   root->left->parent = root;
-  root->left->right = new node<double>(6);
+  root->left->data = 5;
+  root->left->status = true;
+  root->left->right = new node<double>;
   root->left->right->parent = root->left;
-  root->left->left = new node<double>(7);
+  root->left->right->data = 6;
+  root->left->right->status = true;
+  root->left->left = new node<double>;
   root->left->left->parent = root->left;
+  root->left->left->data = 7;
+  root->left->left->status = true;
   return *root;
 }
 
@@ -139,13 +165,23 @@ void test_tree_level_traverse(){
   root.level_treaversal();
 }
 
+void test_convert_to_array(){
+  node<double> root = test_create_tree<double>();
+  node<double> *arr = root.convert_to_array();
+  for(int i{0} ; i <= root.max_nodes() ; i++){
+    if(arr[i].status) std::cout<<arr[i].data<<'\t';
+    else
+     std::cout<<"e"<<'\t';
+  }
+}
+
 int main() {
   // test_postorder();
   // test_preorder();
-  // test_inorder();
+  test_inorder();
   // test_hight();
   // test_node_depth();
   // test_tree_viewer();
-  test_tree_level_traverse(); 
-  
+  // test_tree_level_traverse();
+  test_convert_to_array();
 }
